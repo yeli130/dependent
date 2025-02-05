@@ -1,0 +1,37 @@
+name: workflow with nultiple stages
+on: push
+jobs:
+  job-on-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - run: date
+      - run: pwd
+  job-on-windows:
+    name: a job running on windows
+    runs-on: windows-latest
+    steps:
+      - name: first step in windows job
+        run: date
+      - run: ls -la
+
+  dependent-job-1:
+    needs: [job-on-ubuntu, job-on-windows]
+    runs-on: macos-latest
+    name: A job run on mac after first two jobs
+    steps:
+      - run: pwd
+      - name: new step
+        run: ls
+      - run: env
+  dependent-job-2:
+    needs: dependent-job-1
+    runs-on: macos-latest
+    name: A final job
+    steps:
+      - run: pwd
+      - name: new step
+        run: ls
+      - run: env
+      
+      
+    
